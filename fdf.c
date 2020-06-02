@@ -32,8 +32,10 @@ int		num_lines(char *filename)
 	numlines = 0;
 	fd = open(filename, O_RDONLY, 1);
 	while (get_next_line(fd, &line))
+	{
 		numlines++;
-	free(line);
+		free(line);
+	}
 	close(fd);
 	return (numlines);
 }
@@ -48,13 +50,11 @@ void	ft_init(t_coords *map, char *filename)
 	map->colour = WHITE;
 	map->filename = filename;
 	map->mlx = mlx_init();
-	map->win = mlx_new_window(map->mlx, 1000, 1000, "fdf");
+	map->win = mlx_new_window(map->mlx, 2000, 2000, "fdf");
 }
 
 int		main(int argc, char **argv)
 {
-	int			nbl;
-	int			nbi;
 	char		**arr;
 	t_coords	*map;
 
@@ -64,14 +64,14 @@ int		main(int argc, char **argv)
 		arr = ft_read(argv[1]);
 		map->tab = convert(arr, argv[1]);
 		ft_init(map, argv[1]);
-		nbi = num_digits(arr[0]);
-		nbl = num_lines(argv[1]);
-		map->l = nbl;
-		map->i = nbi;
-		if (map->l >= map->i)
+		map->i = num_digits(arr[0]);
+		map->l = num_lines(argv[1]);
+		if (map->l >= map->i){
 			map->line = 500 / map->l;
-		else
+		}
+		else{
 			map->line = 500 / map->i;
+		}
 		ft_draw_map(map);
 		mlx_key_hook(map->win, close, 0);
 		mlx_loop(map->mlx);

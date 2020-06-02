@@ -6,11 +6,12 @@ COMP	=	gcc
 
 FLAGS	=	-Wall -Werror -Wextra
 
-LIB_DIR = 	./libft/
+LIB_DIR = 	libft/
 
-SRC 	= 	
+SRC 	= 	draw_map.c \
+			read_file.c
 
-LIBFT 	= 	$(addprefix $(LIB_DIR), libft.a)
+# LIBFT 	= 	$(addprefix $(LIB_DIR), libft.a)
 
 all:		$(NAME)
 
@@ -19,7 +20,7 @@ $(NAME):
 			@$(COMP) -c $(SRC) $(FLAGS)
 			@ar rcs $(NAME) *.o
 			@ranlib $(NAME)
-			@$(COMP) -o fdf fdf.c $(NAME) -lmlx -framework OpenGL -framework AppKit -L $(LIBFT) -lft
+			@$(COMP) -o fdf fdf.c $(NAME) -lmlx -framework OpenGL -framework AppKit -L ./libft/ -lft
 			@echo "- LIBRARY COMPILED -"
 
 %.o:		$(HEADER)

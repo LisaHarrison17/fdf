@@ -21,10 +21,14 @@ char	**ft_read(char *fname)
 	{
 		counters.i = 0;
 		map[counters.k] = (char *)malloc(sizeof(char *) * (ft_strlen(line) + 1));
-		while (counters.i++ < numlines)
+		while (counters.i++ < numlines){
 			map[counters.k] = line;
+			map[counters.k][ft_strlen(line) + 1] = '\0';
+		}
 		counters.k++;
 	}
+	map[numlines] = NULL;
+	close(fd);
 	return (map);
 }
 
@@ -56,8 +60,10 @@ int		**convert(char **map, char *filename)
 		arr = ft_strsplit(map[counters.k], ' ');
 		counters.j = count(arr);
 		tab[counters.k] = (int *)malloc(sizeof(int) * counters.j);
-		while (counters.i < counters.j)
-			tab[counters.k][counters.i++] = ft_atoi(arr[y++]);
+		while (counters.i < counters.j){
+			tab[counters.k][counters.i] = ft_atoi(arr[counters.i]);
+			counters.i++;
+		}
 		while (--counters.i >= 0)
 			free(arr[counters.i--]);
 		++counters.k;

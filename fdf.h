@@ -5,7 +5,7 @@
 # include <string.h>
 # include <math.h>
 # include <stdio.h>
-//# include <mlx.h>
+# include <mlx.h>
 # include <fcntl.h>
 
 # define BLACK 0x00000000

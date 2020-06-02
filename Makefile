@@ -21,7 +21,7 @@ $(NAME):
 			@ar rcs $(NAME) *.o
 			@ranlib $(NAME)
 			@$(COMP) -o fdf fdf.c $(NAME) -lmlx -framework OpenGL -framework AppKit -L ./libft/ -lft
-			@echo "- LIBRARY COMPILED -"
+			@echo "- FDF COMPILED -"
 
 %.o:		$(HEADER)
 

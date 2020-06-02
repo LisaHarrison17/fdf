@@ -12,61 +12,76 @@
 
 #include "libft.h"
 
-static int	clear(char *str, char **line)
+static int			check_line(char **stack, char **line)
 {
-	if (*str)
-	{
-		*line = ft_strdup(str);
-		ft_strclr(str);
-		return (1);
-	}
-	return (0);
-}
-
-static int	read_line(char **str, char **line)
-{
-	char	*temp;
-	int		i;
+	char			*tmp;
+	char			*str;
+	int				i;
 
 	i = 0;
-	while ((*str)[i])
-	{
-		if ((*str)[i] == '\n')
-		{
-			temp = *str;
-			*line = ft_strsub(*str, 0, i);
-			*str = ft_strsub(*str, i + 1, ft_strlen(*str) - i);
-			free(temp);
-			return (1);
-		}
-		++i;
-	}
-	return (0);
+	str = *stack;
+	while (str[i] != '\n')
+		if (!str[i++])
+			return (0);
+	tmp = &str[i];
+	*tmp = '\0';
+	*line = ft_strdup(*stack);
+	*stack = ft_strdup(tmp + 1);
+	free(str);
+	return (1);
 }
 
-int			get_next_line(const int fd, char **line)
+static	int			read_file(int fd, char *heap, char **stack, char **line)
 {
-	static char		*str;
-	char			*s;
-	char			buff[BUFF_SIZE + 1];
 	int				ret;
+	char			*tmp;
 
-	if (!str)
-		str = ft_strnew(BUFF_SIZE);
-	if (fd < 0 || !line || read(fd, buff, 0) < 0)
-		return (-1);
-	if (read_line(&str, line))
-		return (1);
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	while ((ret = read(fd, heap, BUFF_SIZE)) > 0)
 	{
-		buff[ret] = '\0';
-		s = str;
-		str = ft_strjoin(str, buff);
-		free(s);
-		if (read_line(&str, line))
-			return (1);
+		heap[ret] = '\0';
+		if (*stack)
+		{
+			tmp = *stack;
+			*stack = ft_strjoin(tmp, heap);
+			free(tmp);
+			tmp = NULL;
+		}
+		else
+			*stack = ft_strdup(heap);
+		if (check_line(stack, line))
+			break ;
 	}
-	if (clear(str, line))
+	if(ret > 0)
 		return (1);
-	return (0);
+	else
+		return (ret);
+}
+
+int				get_next_line(const int fd, char **line)
+{
+	static char		*stack[MAX_FD];
+	char			*heap;
+	int				ret;
+	int				i;
+
+	if (!line || (fd < 0 || fd >= MAX_FD) || (read(fd, stack[fd], 0) < 0) \
+		|| !(heap = (char *)malloc(sizeof(char) * BUFF_SIZE + 1)))
+		return (-1);
+	if (stack[fd])
+		if (check_line(&stack[fd], line))
+			return (1);
+	i = 0;
+	while (i < BUFF_SIZE)
+		heap[i++] = '\0';
+	ret = read_file(fd, heap, &stack[fd], line);
+	free(heap);
+	if (ret != 0 || stack[fd] == NULL || stack[fd][0] == '\0')
+	{
+		if (!ret && *line)
+			*line = NULL;
+		return (ret);
+	}
+	*line = stack[fd];
+	stack[fd] = NULL;
+	return (1);
 }

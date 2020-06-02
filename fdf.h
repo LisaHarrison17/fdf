@@ -51,7 +51,7 @@ typedef	struct	s_coords
 	void		*win;
 }				t_coords;
 
-char			**ft_read(char *fname);
+char			**read_map(char *filename);
 int				num_lines(char *filename);
 int				num_digits(char *line);
 int				**convert(char **map, char *filename);

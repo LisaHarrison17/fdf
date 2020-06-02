@@ -1,34 +1,24 @@
 #include "fdf.h"
 
-char	**ft_read(char *fname)
+char	**read_map(char *filename)
 {
-	int			fd;
-	int			numlines;
-	char		*line;
-	char		**map;
-	t_counters	counters;
+	int		fd;
+	char	*line;
+	char	**map;
+	int		k;
 
-	counters.k = 0;
-	numlines = 0;
-	fd = open(fname, O_RDONLY, 1);
-	while (get_next_line(fd, &line))
-		numlines++;
-	map = (char **)malloc(sizeof(char *) * (numlines + 1));
-	map[numlines] = 0;
-	close(fd);
-	fd = open(fname, O_RDONLY, 1);
+	k = 0;
+	map = (char **)malloc(sizeof(char *) * 25);
+	fd = open(filename, O_RDONLY, 1);
 	while (get_next_line(fd, &line))
 	{
-		counters.i = 0;
-		map[counters.k] = (char *)malloc(sizeof(char *) * (ft_strlen(line) + 1));
-		while (counters.i++ < numlines){
-			map[counters.k] = line;
-			map[counters.k][ft_strlen(line) + 1] = '\0';
-		}
-		counters.k++;
+		map[k] = line;
+		map[k][ft_strlen(line)] = '\0';
+		k++;
 	}
-	map[numlines] = NULL;
+	map[k] = NULL;
 	close(fd);
+	free(line);
 	return (map);
 }
 
@@ -44,29 +34,29 @@ int		count(char **str)
 
 int		**convert(char **map, char *filename)
 {
-	t_counters	counters;
-	int			y;
-	int			**tab;
-	char		**arr;
+	int		i;
+	int		j;
+	int		k;
+	int		**tab;
+	char	**arr;
 
-	counters.k = 0;
+	k = 0;
 	(void)filename;
-	tab = (int **)malloc(sizeof(int *) * num_lines(filename));
-	while (counters.k < num_lines(filename))
+	tab = (int **)malloc(sizeof(int *) * count(map));
+	while (k < count(map))
 	{
-		counters.i = 0;
-		y = 0;
-		counters.j = 0;
-		arr = ft_strsplit(map[counters.k], ' ');
-		counters.j = count(arr);
-		tab[counters.k] = (int *)malloc(sizeof(int) * counters.j);
-		while (counters.i < counters.j){
-			tab[counters.k][counters.i] = ft_atoi(arr[counters.i]);
-			counters.i++;
+		i = 0;
+		arr = ft_strsplit(map[k], ' ');
+		j = count(arr);
+		tab[k] = (int *)malloc(sizeof(int) * j);
+		while (i < j)
+		{
+			tab[k][i] = ft_atoi(arr[i]);
+			free(arr[i]);
+			i++;
 		}
-		while (--counters.i >= 0)
-			free(arr[counters.i--]);
-		++counters.k;
+		free(arr);
+		k++;
 	}
 	return (tab);
 }

@@ -21,22 +21,22 @@ void	ft_draw_line(t_coords *f)
 
 void	draw_vert(t_coords *f, int j, int i)
 {
-	f->x1 = f->startx + (i * f->zoom) + (j * f->zoom);
-	f->x2 = f->startx + (i * f->zoom) + ((j + 1) * f->zoom);
-	f->y1 = ((f->starty + (j * f->zoom)) * 1 / 2) - (((i * f->zoom)
+	f->x1 = f->startx + (i * f->line) + (j * f->line);
+	f->x2 = f->startx + (i * f->line) + ((j + 1) * f->line);
+	f->y1 = ((f->starty + (j * f->line)) * 1 / 2) - (((i * f->line)
 				+ (f->z * f->tab[j][i])) * 1 / 2);
-	f->y2 = ((f->starty + ((j + 1) * f->zoom)) * 1 / 2) - (((i * f->zoom)
+	f->y2 = ((f->starty + ((j + 1) * f->line)) * 1 / 2) - (((i * f->line)
 				+ (f->z * f->tab[j + 1][i])) * 1 / 2);
 	ft_draw_line(f);
 }
 
 void	draw_horiz(t_coords *f, int j, int i)
 {
-	f->x1 = f->startx + (i * f->zoom) + (j * f->zoom);
-	f->x2 = f->startx + (((i + 1) * f->zoom) + (j * f->zoom));
-	f->y1 = ((f->starty + (j * f->zoom)) * 1 / 2) - (((i * f->zoom)
+	f->x1 = f->startx + (i * f->line) + (j * f->line);
+	f->x2 = f->startx + (((i + 1) * f->line) + (j * f->line));
+	f->y1 = ((f->starty + (j * f->line)) * 1 / 2) - (((i * f->line)
 				+ (f->z * f->tab[j][i])) * 1 / 2);
-	f->y2 = ((f->starty + (j * f->zoom)) * 1 / 2) - ((((i + 1) * f->zoom)
+	f->y2 = ((f->starty + (j * f->line)) * 1 / 2) - ((((i + 1) * f->line)
 				+ (f->z * f->tab[j][i + 1])) * 1 / 2);
 	ft_draw_line(f);
 }

@@ -69,9 +69,9 @@ int		main(int argc, char **argv)
 		map->l = nbl;
 		map->i = nbi;
 		if (map->l >= map->i)
-			map->zoom = 500 / map->l;
+			map->line = 500 / map->l;
 		else
-			map->zoom = 500 / map->i;
+			map->line = 500 / map->i;
 		ft_draw_map(map);
 		mlx_key_hook(map->win, close, 0);
 		mlx_loop(map->mlx);

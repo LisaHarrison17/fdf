@@ -27,7 +27,7 @@ typedef	struct	s_coords
 {
 	double		x;
 	double		y;
-	int			zoom;
+	int			line;
 	double		x1;
 	double		x2;
 	double		y1;
